@@ -28,10 +28,9 @@ public class RavenousWolf extends WolfBase {
     }
     public void control() {
         if (tool.getDistance(this.x, this.y, target.getX(), target.getY()) <= 48) this.stopHoming = true;
-        if (this.attackCooldown <= 0 && this.stopAttacking && (tool.getNumberOfPlayers() > 0 || tool.getNumberOfSheep() > 0)) {
+        if (this.attackCooldown <= 0 && this.stopAttacking && (tool.getNumberOfPlayers() > 0 || tool.getNumberOfSheep() > 0) && !this.PANIC) {
             this.stopAttacking = false;
             this.stopHoming = false;
-            this.PANIC = false;
             this.target = tool.getNearestPlayerOrSheep(this.x, this.y);
         }
         
@@ -93,12 +92,6 @@ public class RavenousWolf extends WolfBase {
             this.targetXY[0] = Math.cos(r);
             this.targetXY[1] = Math.sin(r);
         }
-    }
-    public void underAttack(Entity a) {
-        this.PANIC = true;
-        this.targetXY[0] = (a.getX() - this.x) * -1;
-        this.targetXY[1] = (a.getY() - this.y) * -1;
-        if (this.health <= 0) {main.score += 12;} else {main.score += 2;}
     }
     public void render(Graphics2D g) {
         g.setColor(new Color(0.0f, 0.0f, 0.0f));

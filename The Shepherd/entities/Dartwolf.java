@@ -17,7 +17,9 @@ public class Dartwolf extends WolfBase {
     }
     public void tick() {
         if (main.maintool.wolfSpawnZone(this.x, this.y) && (this.attacked || this.PANIC || this.stopHoming)) {
-            this.relocateRestrike();
+            if (!tool.wolfBossExists()) {
+                this.health = 0;
+            } else this.relocateRestrike();
         } else {
             super.tick();
             if (this.attackCooldown == 0 && this.health > 0) this.attack(this.bB, ((this.PANIC) ? 10d:10d) + main.wolfAttack);
@@ -87,9 +89,11 @@ public class Dartwolf extends WolfBase {
         this.PANIC = true;
         this.targetXY[0] = (a.getX() - this.x) * -1;
         this.targetXY[1] = (a.getY() - this.y) * -1;
+        this.attacked();
+        if (!tool.wolfBossExists() && this.health <= 0) main.score += 5;
     }
     public void relocateRestrike() {
-        if (tool.getNumberOfPlayers() <= 0 && tool.getNumberOfSheep() <= 0) return;
+        if (tool.getNumberOfPlayers() <= 0) return;
         double attemptX, attemptY;
         byte tries = 0;
         do {

@@ -7,7 +7,7 @@ public class Button {
     private buttons.ButtonFunction buttonUse, buttonHover;
     public boolean hover = false, showHover;
     private int x, y;
-    private String text, hP, hA;
+    private String text;
     public Button(int x, int y, String t, buttons.ButtonFunction u, buttons.ButtonFunction h, boolean showH) {
         this.buttonUse = u;
         this.buttonHover = h;
@@ -30,12 +30,9 @@ public class Button {
         this.hover = true;
     }
     public void render(Graphics2D g) {
-        //Window.renderText(g, this.text + ((hover) ? hA:""), this.x, this.y, Window.T_004);
         if (hover && showHover) {
             if (keyboardInput.changingKeybind == -1) {Window.renderText(g, this.text, this.x, this.y, Window.T_004);} else 
             Window.renderText(g, this.text, this.x, this.y, Window.T_005);
-        } else
-        Window.renderText(g, this.text, this.x, this.y);
-        //if (hover) Window.renderText(g, hP, this.x - 1 - Window.getTextWidth(hP), this.y);
+        } else Window.renderText(g, this.text, this.x, this.y);
     }
 }

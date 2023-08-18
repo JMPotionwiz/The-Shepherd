@@ -17,7 +17,12 @@ public class Sheep extends Entity {
         this.deathAnimMax = 40 * 10;
         this.black = ((int)(Math.random() * 20) == 0);
         this.bB = new boundingBox(-5d,-8d,5d,2d);
-        if (falling) fall = 80;
+        if (falling) {
+            fall = 80;
+            tool.playSoundWithinDistance("sfx_sheepspawn", this.x, this.y, 256);
+        }
+        hurtSound = "sfx_hurtsheep";
+        deathSound = "sfx_sheepdeath";
     }
     public void tick() {
         if (this.fall <= 0) {
@@ -92,7 +97,10 @@ public class Sheep extends Entity {
         }
     }
     public void underAttack(Entity a) {
-        if (tool.getNumberOfSheep() > 0 && main.Difficulty < 3) if (this.health <= 0) {main.score -= 20;} else {main.score--;}
+        super.underAttack(a);
+        if (this.health <= 0) if (a instanceof Sheepskin) {
+            core.main.lastAttackBySheepskin = true;
+        } else core.main.lastAttackBySheepskin = false;
     }
     public void render(Graphics2D g) {
         if (this.fall > 0) {

@@ -17,6 +17,9 @@ public class Sheepskin extends WolfBase {
         this.deathAnimMax = 40 * 10;
         this.bB = new boundingBox(-5d,-5d,5d,5d);
         this.target = null;
+        idleSounds = null;
+        hurtSound = "sfx_hurtsheepskin";
+        deathSound = "sfx_sheepskindeath";
     }
     public void tick() {
         if (main.maintool.wolfSpawnZone(this.x, this.y) && (this.attacked || this.PANIC || this.stopHoming)) {
@@ -53,6 +56,7 @@ public class Sheepskin extends WolfBase {
             moveY = target.getY() - this.y;
             this.targetXY[0] = 0;
             this.targetXY[1] = 0;
+            if (this.target.health <= 0) this.target = null;
         } else if (!this.PANIC && threatNear) {
             moveX = (player.getX() - this.x) * -1;
             moveY = (player.getY() - this.y) * -1;
@@ -131,7 +135,8 @@ public class Sheepskin extends WolfBase {
         this.PANIC = true;
         this.targetXY[0] = (a.getX() - this.x) * -1;
         this.targetXY[1] = (a.getY() - this.y) * -1;
-        if (this.health <= 0) {main.score += 32;}
+        if (this.health <= 0) {main.score += 25;}
+        this.attacked();
     }
     public void relocateRestrike() {
         if (tool.getNumberOfPlayers() <= 0 && tool.getNumberOfSheep() <= 0) return;

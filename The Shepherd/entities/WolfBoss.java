@@ -24,13 +24,14 @@ public class WolfBoss extends WolfBase {
             super.tick();
             if (this.attackCooldown == 0 && this.health > 0 && this.howling <= 0) this.attack(this.bB, ((this.PANIC) ? 10d:20d) + main.wolfAttack);
             if (this.howling > 0) this.howling--;
-            if (this.preHowl > 0) this.preHowl--;
+            if (this.preHowl > 0 && this.health > 0) this.preHowl--;
             if (this.howlCooldown > 0 && this.howling <= 0) this.howlCooldown--;
-            if (this.preHowl == 0) {
+            if (this.preHowl == 0 && this.health > 0) {
                 this.preHowl = -1;
                 this.howling = 40*3;
-                if (Math.random() < 0.5) {this.callWolves();} else {this.callDartwolves();}
-                this.howlCooldown = 40*10;
+                if (Math.random() < 0.75 && tool.getNumberOfRavenousWolves() <= 0) {this.callWolves();} else {this.callDartwolves();}
+                tool.playSoundWithinDistance("sfx_howl", this.x, this.y, 512);
+                this.howlCooldown = 40*(8 + (int)(Math.random() * 9));
             }
         }
     }
@@ -108,15 +109,21 @@ public class WolfBoss extends WolfBase {
         if (this.health <= 0) {
             main.score += 250;
             main.wolfAttack++;
-        } else {
-            main.score += 3;
-            if (this.howlCooldown <= 0 && this.preHowl == -1) {
-                this.preHowl = 40;
-            }
+            main.maintool.playSound("sfx_bossdeath");
+            if (main.bgm != null) main.bgm.Stop();
+            main.bgm = null;
+            try {
+                main.bgm = new core.Sound("mus_game");
+                main.bgm.setVolume(main.musVolume);
+            } catch (Exception e) {}
+            main.delayBgm = 100;
+        } else if (this.howlCooldown <= 0 && this.preHowl == -1) {
+            this.preHowl = 40;
         }
+        this.attacked();
     }
     public void relocateRestrike() {
-        if (tool.getNumberOfPlayers() <= 0 && tool.getNumberOfSheep() <= 0) return;
+        if (tool.getNumberOfPlayers() <= 0) return;
         double attemptX, attemptY;
         byte tries = 0;
         do {

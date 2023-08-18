@@ -37,7 +37,7 @@ public class tool {
         Entity p = null;
         double d = -1;
         for (Entity e : main.entities) {
-            if (e instanceof Player) {
+            if (e instanceof Player && e.health > 0) {
                 if (d == -1 || (getDistance(x,y,e.getX(),e.getY()) < d)) {
                     d = getDistance(x,y,e.getX(),e.getY());
                     p = e;
@@ -50,7 +50,7 @@ public class tool {
         Entity s = null;
         double d = -1;
         for (Entity e : main.entities) {
-            if (e instanceof Sheep) {
+            if (e instanceof Sheep && e.health > 0) {
                 if (d == -1 || (getDistance(x,y,e.getX(),e.getY()) < d)) {
                     d = getDistance(x,y,e.getX(),e.getY());
                     s = e;
@@ -74,7 +74,7 @@ public class tool {
         Entity p = null;
         double d = -1;
         for (Entity e : main.entities) {
-            if (e instanceof Player || e instanceof Sheep) {
+            if ((e instanceof Player || e instanceof Sheep) && e.health > 0) {
                 if (d == -1 || (getDistance(x,y,e.getX(),e.getY()) < d)) {
                     d = getDistance(x,y,e.getX(),e.getY());
                     p = e;
@@ -104,6 +104,13 @@ public class tool {
         }
         return output;
     }
+    public static int getNumberOfRavenousWolves() {
+        int output = 0;
+        for (Entity e : main.entities) {
+            if (e instanceof RavenousWolf && e.health > 0) output++;
+        }
+        return output;
+    }
     public static int getNumberOfNonspecialWolves() {
         int output = 0;
         for (Entity e : main.entities) {
@@ -111,11 +118,28 @@ public class tool {
         }
         return output;
     }
+    public static boolean wolfBossExists() {
+        for (Entity e : main.entities) {
+            if (e instanceof WolfBoss && e.health > 0) return true;
+        }
+        return false;
+    }
     static boolean inTheWoods(double x, double y, boundingBox b) {
         if (x + b.x2 <= 16*16) {return true;}
         if (y + b.y2 <= 16*16) {return true;}
         if (x + b.x1 >= (main.tileMap.get(0).size()*16)-(16*16)) {return true;}
         if (y + b.y1 >= (main.tileMap.size()*16)-(16*16)) {return true;}
         return false;
+    }
+    static void playSoundWithinDistance(String s, double x, double y, double maxDistance) {
+        if (maxDistance <= 0) return;
+        if (core.main.cam == null) {
+            core.main.maintool.playSound(s);
+            return;
+        }
+        float v = 1 - (float)(getDistance(x, y, core.main.cam.x, core.main.cam.y) / maxDistance);
+        float p = (float)((x - core.main.cam.x) / maxDistance);
+        if (v <= 0) return;
+        core.main.maintool.playSound(s, v, p);
     }
 }

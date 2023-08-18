@@ -27,15 +27,19 @@ public class buttons {
             } else buttonPressed = false;
             if (buttonScroll <= 0 && main.keys[0].pressed() && !main.keys[1].pressed()) {
                 buttonScroll = 10;
+                main.changeVolume[0] = 0;
                 int E_002 = selectedButton[0];
-                int E_003 = Math.max(selectedButton[0] - 1, 0);
+                int E_003 = selectedButton[0] - 1;
+                if (E_003 < 0) E_003 += buttons.size();
                 if (buttons.get(E_002).size() != buttons.get(E_003).size()) selectedButton[1] = 0;
                 selectedButton[0] = E_003;
             }
             if (buttonScroll <= 0 && main.keys[1].pressed() && !main.keys[0].pressed()) {
                 buttonScroll = 10;
+                main.changeVolume[0] = 0;
                 int E_002 = selectedButton[0];
-                int E_003 = Math.min(selectedButton[0] + 1, buttons.size() - 1);
+                int E_003 = selectedButton[0] + 1;
+                if (E_003 > buttons.size() - 1) E_003 -= buttons.size();
                 if (buttons.get(E_002).size() != buttons.get(E_003).size()) selectedButton[1] = 0;
                 selectedButton[0] = E_003;
             }

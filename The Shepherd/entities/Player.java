@@ -118,6 +118,7 @@ public class Player extends Entity {
             }
         }
         this.attackCooldown = 8;
+        tool.playSoundWithinDistance("sfx_swing", this.x, this.y, 256);
         if (attackSuccessful == true) {main.freezeFrame = true;}
     }
     public void render(Graphics2D g) {

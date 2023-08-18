@@ -7,12 +7,16 @@ public abstract class WolfBase extends Entity {
     protected Entity target;
     public WolfBase(double x, double y) {
         super(x,y);
+        idleSounds = new String[] {"sfx_bark1","sfx_bark2","sfx_bark3"};
+        hurtSound = "sfx_hurtwolf";
+        deathSound = "sfx_wolfdeath";
     }
     public void underAttack(Entity a) {
+        super.underAttack(a);
         this.PANIC = true;
         this.targetXY[0] = (a.getX() - this.x) * -1;
         this.targetXY[1] = (a.getY() - this.y) * -1;
-        if (this.health <= 0) {main.score += 10;} else {main.score += 2;}
+        if (this.health <= 0) {main.score += 10;}
     }
     public void relocateRestrike() {
         if (tool.getNumberOfPlayers() <= 0 && tool.getNumberOfSheep() <= 0) return;

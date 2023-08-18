@@ -11,6 +11,8 @@ public class Entity {
     protected boundingBox bB;
     protected boolean[] dir = {true,true};
     protected double[] targetXY = {0,0};
+    protected String idleSounds[] = null, hurtSound = "sfx_hurt", deathSound = "sfx_death";
+    private int idleSoundCooldown = 0;
     
     private EntityAssets a = new EntityAssets();
     private Entity t = null;
@@ -53,6 +55,15 @@ public class Entity {
         this.moving = false;
         if (this.health > 0) this.control();
         this.move();
+        
+        if (--this.idleSoundCooldown <= 0) {
+            if (this.idleSounds != null && this.idleSoundCooldown == 0 && this.health > 0) {
+                int E_001 = idleSounds.length;
+                tool.playSoundWithinDistance(idleSounds[(int)(Math.random() * E_001)], this.x, this.y, 256);
+            }
+            this.idleSoundCooldown = 40 + (int)(Math.random() * 60);
+        }
+        
         //System.out.println(this.x + ", " + this.y);
     }
     public void move() {
@@ -119,7 +130,15 @@ public class Entity {
         }
         this.attackCooldown = 0;
     }
-    public void underAttack(Entity a) {}
+    public void underAttack(Entity a) {
+        this.attacked();
+    }
+    protected void attacked() {
+        this.idleSoundCooldown = 40 + (int)(Math.random() * 60);
+        if (this.health > 0) {
+            if (this.hurtSound != null) tool.playSoundWithinDistance(this.hurtSound, this.x, this.y, 256);
+        } else if (this.deathSound != null) tool.playSoundWithinDistance(this.deathSound, this.x, this.y, 256);
+    }
     public void retarget(Entity t) {}
     public void render(Graphics2D g) {
         g.setColor(new Color(0.0f, 0.0f, 0.0f));

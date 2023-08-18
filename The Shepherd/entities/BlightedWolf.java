@@ -14,6 +14,9 @@ public class BlightedWolf extends WolfBase {
         this.deathAnimMax = 40 * 10;
         this.bB = new boundingBox(-5d,-5d,5d,5d);
         this.target = tool.getRandomPlayerOrSheep();
+        idleSounds = new String[] {"sfx_blightwolfbark1","sfx_blightwolfbark2","sfx_blightwolfbark3"};
+        hurtSound = "sfx_hurtblightwolf";
+        deathSound = "sfx_blightwolfdeath";
     }
     public void tick() {
         if (main.maintool.wolfSpawnZone(this.x, this.y) && (this.attacked || this.PANIC || this.stopHoming)) {
@@ -87,7 +90,8 @@ public class BlightedWolf extends WolfBase {
     }
     public void underAttack(Entity a) {
         this.PANIC = true;
-        if (this.health <= 0) {main.score += 10;} else {main.score += 2;}
+        if (this.health <= 0) {main.score += 20;}
+        this.attacked();
     }
     public void render(Graphics2D g) {
         g.setColor(new Color(0.0f, 0.0f, 0.0f));
