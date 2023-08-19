@@ -64,7 +64,7 @@ public class main {
     public static boolean lastAttackBySheepskin = false;
     
     public static ArrayList<Sound> sounds = new ArrayList<Sound>();
-    public static Sound bgm;
+    public static Sound bgm, bgms[];
     public static int delayBgm = 0;
     private static Sound bg_silence;
     private static ArrayList<String> soundsQueue = new ArrayList<String>();
@@ -81,7 +81,6 @@ public class main {
             bg_silence.Loop();
         } catch (Exception e) {}
         
-        
         mainWindow = new Window("The Shepherd");
         mainWindow.addKeyListener(new keyboardInput());
         mainWindow.getCanvas().addKeyListener(new keyboardInput());
@@ -89,8 +88,9 @@ public class main {
         //menus.MainMenu(false);
         maintool.createMenuBackground();
         //System.out.println("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890.!?:,;'\"-+_()[]{}/\\*%");
+        try{bgms = new Sound[] {new Sound("mus_menu"),new Sound("mus_game"),new Sound("mus_boss")};} catch (Exception e) {System.out.println("Some'hin' wen' wrong!");}
         
-        try{Thread.sleep(200);}catch(Exception e){};
+        //try{Thread.sleep(200);}catch(Exception e){};
         while (true) {
             if (fade[0] == 30 && introTime == 80) {
                 maintool.playSound("sfx_introjingle");
@@ -168,7 +168,7 @@ public class main {
             }
             
             if (keys[7].pressed()) {
-                if (allowPausing) switch (menu) {
+                if (allowPausing && fade[0] == 0) switch (menu) {
                     case -1:
                         menu = 0;
                         paused = true;
@@ -189,12 +189,7 @@ public class main {
                             fade[1] = 1;
                             sounds.clear();
                             maintool.playSound("sfx_unpause");
-                            bgm = null;
-                            try {
-                                bgm = new Sound("mus_menu");
-                                bgm.setVolume(musVolume);
-                                startupMusic = true;
-                            } catch (Exception e) {}
+                            maintool.prepareBgm(0);
                         },()->{}));
                         buttons.buttons.add(tmp);
                         maintool.stopAllSounds();
@@ -240,11 +235,6 @@ public class main {
                         break;
                     case 3:
                         menus.GameOver();
-                        try {
-                            bgm = new Sound("mus_menu");
-                            bgm.setVolume(musVolume);
-                            startupMusic = true;
-                        } catch (Exception e) {}
                         break;
                     case 64: 
                         menu = 64;
@@ -309,13 +299,7 @@ public class main {
                             if (wolfQueue.get(r) instanceof Sheepskin && wolfQueue.size() > 1) redo = true;
                             if (wolfQueue.get(r) instanceof WolfBoss) {
                                 maintool.playSound("sfx_howl");
-                                if (bgm != null) bgm.Stop();
-                                bgm = null;
-                                try {
-                                    bgm = new Sound("mus_boss");
-                                    bgm.setVolume(musVolume);
-                                } catch (Exception e) {}
-                                delayBgm = 100;
+                                maintool.delayBgm(2, 100);
                             }
                             wolfQueue.get(r).relocateRestrike();
                             entities.add(wolfQueue.get(r));
@@ -347,7 +331,7 @@ public class main {
                     menuQueue = 3;
                     fade[1] = 1;
                     delayBgm = 0;
-                    if (bgm != null) bgm.Stop();
+                    maintool.prepareBgm(0);
                 }
             }
             if (score > highScore) highScore = score;
@@ -589,6 +573,26 @@ public class main {
         public static void startAllSounds() {
             for (Sound i : sounds) if (i.clip.getMicrosecondPosition() < i.clip.getMicrosecondLength()) i.Start();
         }
+        public static void prepareBgm(int i) {
+            if (bgm != null) bgm.Stop();
+            bgm = null;
+            try {
+                bgm = bgms[i];
+                bgm.Reset();
+                bgm.setVolume(musVolume);
+                startupMusic = true;
+            } catch (Exception e) {}
+        }
+        public static void delayBgm(int i, int delay) {
+            if (bgm != null) bgm.Stop();
+            bgm = null;
+            try {
+                bgm = bgms[i];
+                bgm.Reset();
+                bgm.setVolume(musVolume);
+            } catch (Exception e) {}
+            delayBgm = delay;
+        }
         public static void SAVE() {
             try{
                 if (!saves.exists()) {
@@ -646,13 +650,7 @@ public class main {
                 menuQueue = -1;
                 fade[1] = 1;
                 maintool.playSound("sfx_start");
-                if (bgm != null) bgm.Stop();
-                bgm = null;
-                try {
-                    bgm = new Sound("mus_game");
-                    bgm.setVolume(musVolume);
-                    startupMusic = true;
-                } catch (Exception e) {}
+                maintool.prepareBgm(1);
             },()->{}));
             buttons.buttons.add(tmp);
             tmp = new ArrayList<Button>();

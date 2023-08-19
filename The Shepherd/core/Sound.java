@@ -16,6 +16,10 @@ public class Sound {
     public void Start() {clip.start();}
     public void Stop() {clip.stop();}
     public void Loop() {clip.loop(Clip.LOOP_CONTINUOUSLY);}
+    public void Reset() {
+        clip.stop();
+        clip.setMicrosecondPosition(0);
+    }
     public float getVolume() {
         FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
         return (float) Math.pow(10f, gainControl.getValue() / 20f);

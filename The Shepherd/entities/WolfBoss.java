@@ -110,13 +110,7 @@ public class WolfBoss extends WolfBase {
             main.score += 250;
             main.wolfAttack++;
             main.maintool.playSound("sfx_bossdeath");
-            if (main.bgm != null) main.bgm.Stop();
-            main.bgm = null;
-            try {
-                main.bgm = new core.Sound("mus_game");
-                main.bgm.setVolume(main.musVolume);
-            } catch (Exception e) {}
-            main.delayBgm = 100;
+            main.maintool.delayBgm(1, 100);
         } else if (this.howlCooldown <= 0 && this.preHowl == -1) {
             this.preHowl = 40;
         }

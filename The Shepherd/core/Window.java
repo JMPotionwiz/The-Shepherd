@@ -170,7 +170,7 @@ public class Window extends JFrame {
                 for (int i = -1; i < 2; i++) for (int j = -1; j < 2; j++)
                 g.drawImage(main.menuBackground, -(int)main.menuWander[0] + (j * 1024), -(int)main.menuWander[1] + (i * 1024), null);
                 g.drawImage(main.miscAssets.get("title"), -80, -127 + 24, null);
-                renderText(g, "version: 0.2.0", -126, 128 - 9);
+                renderText(g, "version: 0.2.1", -126, 128 - 9);
                 break;
             case 2:
                 for (int i = -1; i < 2; i++) for (int j = -1; j < 2; j++)
@@ -294,7 +294,7 @@ public class Window extends JFrame {
                 for (int i = -1; i < 2; i++) for (int j = -1; j < 2; j++)
                 g.drawImage(main.menuBackground, -(int)main.menuWander[0] + (j * 1024), -(int)main.menuWander[1] + (i * 1024), null);
                 g.drawImage(main.miscAssets.get("title"), -80, -127 + 24, null);
-                renderText(g, "version: 0.2.0", -126, 128 - 9);
+                renderText(g, "version: 0.2.1", -126, 128 - 9);
                 break;
             case 2:
                 for (int i = -1; i < 2; i++) for (int j = -1; j < 2; j++)
