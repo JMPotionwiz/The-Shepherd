@@ -1,4 +1,4 @@
-# The Shepherd (version 0.2.0) - by J. M. Potionwiz
+# The Shepherd (version 0.2.1) - by J. M. Potionwiz
 
 Default Controls:
 + W: move up.
